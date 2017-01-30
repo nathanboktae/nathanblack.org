@@ -15,6 +15,13 @@ const
   commitHash = (process.env.CIRCLE_SHA1 || '').substr(0, 7),
   siteStyles = commitHash ? `site.${commitHash}.css` : 'site.css',
   siteScript = commitHash ? `site.${commitHash}.js` : 'site.js',
+  staticAssets = [
+    'assets/*.woff',
+    'assets/*.woff2',
+    'assets/*.png',
+    'assets/*.jpg',
+    'assets/*.svg'
+  ],
   serving = process.argv[2] === 'serve',
   jadeLocals = { moment, siteStyles, siteScript },
 
@@ -49,6 +56,9 @@ gulp.task('scripts', function() {
     .pipe(gulp.dest('build'))
     .pipe(browserSync.reload({ stream: true }))
 })
+
+
+gulp.task('move', () => gulp.src(staticAssets).pipe(gulp.dest('build')))
 
 function render(name, template, jadeOpts) {
   return new File({
@@ -193,7 +203,7 @@ function compileBlog() {
 gulp.task('blog', ['blog-aggregates'], compileBlog)
 gulp.task('blog-nodeps', compileBlog)
 
-gulp.task('default', ['stylus', 'scripts', 'blog'])
+gulp.task('default', ['move', 'stylus', 'scripts', 'blog'])
 
 gulp.task('serve', ['default'], function() {
   browserSync({
