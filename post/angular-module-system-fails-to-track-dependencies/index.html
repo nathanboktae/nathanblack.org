@@ -1,0 +1,40 @@
+<!DOCTYPE html><html><head><title>Angular's module system fails at tracking dependencies properly - Nathan Black</title><meta charset="utf-8"><meta name="description" content="A blog about modern web development, from front end to Node.js, JavaScript, styling, testing, and software development practices"><meta name="viewport" content="width=device-width"><link rel="stylesheet" href="/site.f9fb8d4.css"><link rel="stylesheet" href="//fonts.googleapis.com/css?family=Roboto:300,400|Raleway|Nobile:400,700"></head><body><header><aside><a href="https://github.com/nathanboktae" class="github"></a><a href="https://plus.google.com/+NathanBlackJ" class="gplus"></a><a href="mailto:nathan@nathanblack.org" class="email"></a></aside><div class="logo"><img src="//gravatar.com/avatar/f78c2c988486648311bcf116070e2487.jpg?s=110"></div><h2><a href="/"><span class="name">nathanblack</span><span>.org</span></a></h2><h4>Refining Modern Web Development</h4></header><aside class="github"><h2><a href="https://github.com/nathanboktae"><b>@</b>nathanboktae</a></h2><ul data-bind="foreach: events" class="events"><li data-bind="attr: { class: type }"><span data-bind="text: when" class="date"></span><h3 data-bind="html: summary"></h3><p data-bind="text: $data.details"></p></li></ul></aside><article><span class="date">Friday, May 15th 2015</span><section class="post"><h1>Angular's module system fails at tracking dependencies properly</h1><div class="content"><p><a href="https://angularjs.org/">Angular</a>, being a framework with a lot of solutions to a problem, forces users to use modules - a very good thing. However, rather than letting users choose their module and package system (<a href="http://requirejs.org/">RequireJS</a> or <a href="http://browserify.org/">Browserify</a> or <a href="http://webpack.github.io/">Webpack</a> for loaders and AMD vs CommonJS vs Harmony for module formats), it brings in it&#39;s own module format, without a loader.</p>
+<p>Defining a module looks like this</p>
+<pre><code class="lang-javascript">var <span class="hljs-built_in">module</span> = angular.<span class="hljs-built_in">module</span>(<span class="hljs-string">'fruit-stand'</span>, [<span class="hljs-string">'raspberries'</span>, <span class="hljs-string">'strawberries'</span>, <span class="hljs-string">'apples'</span>])
+<span class="hljs-regexp">//</span> define what the <span class="hljs-built_in">module</span> <span class="hljs-keyword">is</span> <span class="hljs-keyword">or</span> has <span class="hljs-keyword">by</span> calling methods <span class="hljs-literal">on</span> it
+</code></pre>
+<p>it also includes a dependency injection component, because, uh, that&#39;s what they use in Java so JavaScript needs one too, because modules can&#39;t be scoped or replaced in a dynamic, interpretted language right? Nevermind. Well here&#39;s how it works:</p>
+<!--more-->
+<pre><code class="lang-javascript">angular.module(<span class="hljs-string">'raspberries'</span>).constant([<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>])
+angular.module(<span class="hljs-string">'strawberries'</span>).factory(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+  <span class="hljs-keyword">return</span> <span class="hljs-comment">// anything</span>
+})
+
+angular.module(<span class="hljs-string">'fruit-stand'</span>, [<span class="hljs-string">'raspberries'</span>, <span class="hljs-string">'strawberries'</span>, <span class="hljs-string">'apples'</span>]).controller(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(raspberries, strawberries, apples, $http, $scope)</span> </span>{
+  <span class="hljs-comment">// extend $scope for what your controller needs</span>
+})
+</code></pre>
+<p>In <code>.controller</code>, it will function scan it and see <code>raspberries</code> will match the <code>raspberries</code> module and inject what it exports. It turns out angular doesn&#39;t correlate or validate that your injections match your declared dependecies! so in a codebase I inherited, I discovered soemthing like this</p>
+<pre><code class="lang-javascript"><span class="hljs-comment">// app.js</span>
+angular.module(<span class="hljs-string">'app'</span>, [<span class="hljs-string">'some-common-directive'</span>, <span class="hljs-string">'some-service'</span>, <span class="hljs-string">'some-plugin'</span>]).config([<span class="hljs-string">'some-common-directive'</span>, <span class="hljs-string">'some-service'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+
+}])
+
+<span class="hljs-comment">// some-common-directive.js</span>
+angular.module(<span class="hljs-string">'some-common-directive'</span>).directive(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(some-plugin)</span> </span>{ })
+</code></pre>
+<p>There was some unused dependency in <code>app.js</code> (<code>some-plugin</code>) so I removed it. Turns out it broke the app because <code>some-common-directive</code> used it, but because you just throw all the scripts in the page, eventually someone else required it, so it could use it too without declaring it! Now I have no assurance that what my module declares as a depdencency is accurate at all - the main goal of a module system.</p>
+<p>Compare this with the simple, straight-forward AMD, CJS, or Harmony formats:</p>
+<pre><code class="lang-javascript"><span class="hljs-comment">// AMD</span>
+define([<span class="hljs-string">'raspberries'</span>, <span class="hljs-string">'strawberries'</span>, <span class="hljs-string">'apples'</span>], <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">raspberries, strawberries, apples</span>) </span>{
+
+})
+
+<span class="hljs-comment">// CJS</span>
+<span class="hljs-keyword">var</span> raspberries = <span class="hljs-built_in">require</span>(<span class="hljs-string">'raspberries'</span>)
+
+<span class="hljs-comment">// ES6 / Harmony</span>
+<span class="hljs-keyword">import</span> raspberries
+</code></pre>
+<p>What you ask for is given to you in a local variable or parameter. Didn&#39;t ask for it? it&#39;s not there. TypeError and you blow up. Not surprizing as the answer is usually to <a href="http://blog.cleancoder.com/uncle-bob/2014/11/24/FPvsOO.html">just use a function</a>.</p>
+</div><ul class="tags"><li><a href="/tag/angular">angular</a></li><li><a href="/tag/front-end">front-end</a></li><li><a href="/tag/modules">modules</a></li></ul></section></article><script src="/site.f9fb8d4.js"></script></body></html>

@@ -1,0 +1,47 @@
+<!DOCTYPE html><html><head><title>jspm and systemjs: High friction package managment - Nathan Black</title><meta charset="utf-8"><meta name="description" content="A blog about modern web development, from front end to Node.js, JavaScript, styling, testing, and software development practices"><meta name="viewport" content="width=device-width"><link rel="stylesheet" href="/site.f9fb8d4.css"><link rel="stylesheet" href="//fonts.googleapis.com/css?family=Roboto:300,400|Raleway|Nobile:400,700"></head><body><header><aside><a href="https://github.com/nathanboktae" class="github"></a><a href="https://plus.google.com/+NathanBlackJ" class="gplus"></a><a href="mailto:nathan@nathanblack.org" class="email"></a></aside><div class="logo"><img src="//gravatar.com/avatar/f78c2c988486648311bcf116070e2487.jpg?s=110"></div><h2><a href="/"><span class="name">nathanblack</span><span>.org</span></a></h2><h4>Refining Modern Web Development</h4></header><aside class="github"><h2><a href="https://github.com/nathanboktae"><b>@</b>nathanboktae</a></h2><ul data-bind="foreach: events" class="events"><li data-bind="attr: { class: type }"><span data-bind="text: when" class="date"></span><h3 data-bind="html: summary"></h3><p data-bind="text: $data.details"></p></li></ul></aside><article><span class="date">Saturday, July 11th 2015</span><section class="post"><h1>jspm and systemjs: High friction package managment</h1><div class="content"><p>We have a decent-sized Angular codebase here at <a href="http://www.appuri.com/">Appuri</a> that I want to replace with real module system that will allow for a gradual move away from Angular. A friend recently pointed me to <a href="http://jspm.io/">jspm</a> and <a href="https://github.com/systemjs/systemjs">systemjs</a>. The goal and direction is sound - load any module format (AMD, CommonJS, Harmony/ES6) and be registry-agnostic (npm or GitHub is out of the box with registry plugins, namely for bower). Unlike bower, since the loader and the package manager work together, it maintains the mapping of modules that normally you do manually in <a href="http://requirejs.org/docs/api.html#config">the <code>map</code> and <code>paths</code> sections of your RequireJS main</a>. It also has a builder, so you can work in a mode that loads files individually, or bundle them up together for production, with source maps and minifcation. It also supports ES6 compiling to ES5 (or &quot;transpiling&quot; <a href="https://twitter.com/mraleph/status/471756991527124993">if you don&#39;t fully understand what compiling is</a>), so it is very future-standards focused. It&#39;s a superset of what I want from RequireJS, so I was excited and dove in.</p>
+<p>Three days in, I&#39;m ready to throw in the towel as <a href="https://github.com/systemjs/builder/issues/223">I can&#39;t get SystemJS builder to work</a>. There are bigger issues too.</p>
+<ol>
+<li><h2 id="bower-should-be-a-first-class-registry">Bower should be a first class registry</h2>
+<p>So jspm is registry agnostic, and it&#39;s registry providers built in are npm and GitHub. Why a GitHub provder instead of bower? It&#39;s so similar to bower, yet lacking too. They are both git based (well except these muts be in GitHub, damn your priviate or alternate git repo). It also ignores dependencies in the bower.json - which basically defeats the purpose of the package manager as you are now left to dealing with the dependecies yourself, manually editing your <code>config.js</code> - the thing that it&#39;s supposed to manage for you.</p>
+<p>I started out simply using <code>jspm install angular</code>. Worked fine. Then trying to install angular plugins, they weren&#39;t in the registry. so I did them mangually via <code>jspm install github:somedude/angular-plugin</code>. However they would often just have a bower.json, so the dependency on angular wasn&#39;t declared. It was worse as I did <code>angular-chart</code>, which depends on <code>c3</code>, which then depends on <code>d3</code>.</p>
+<p>Ugh. So I install <a href="https://www.npmjs.com/package/jspm-bower-endpoint">jspm-bower-endpoint</a> and run <code>jspm install bower:angular-chart</code>. cool.... wait, it depends on <code>bower:angular</code>, but I already have <code>github:angular</code> installed from the jspm registry... Ugh. <code>jspm uninstall</code> ALL the jspm packages and just use the bower registry, otherwise unless the jspm registry is 100% complete, you&#39;ll just have a mess to manually maintain. The same is true if you mixed and matched <code>npm</code> with <code>bower</code>, unless the dependencies didn&#39;t cross. BTW, you still need to have a <code>package.json</code> to get <code>jspm</code> down anyways.... so you have 2 package maangers. Actually, 2 package managers and a package manager registry wrapper.</p>
+</li>
+<li><h2 id="automatic-module-detection-really-does-not-work">Automatic module detection really does not work</h2>
+<!--more--> 
+<p>So once I had everything installed via bower, I thought I&#39;d be set. However, system.js tries to detect what the module format is, but it often gets this wrong as people do incosistent module dances to adapt to various modules. E.g. a common thing is to detect AMD and register with AMD, or detect CommonJS and use that, then fallback to global. Well <code>define</code> and <code>define.amd</code> won&#39;t be there unless you specifically specify the format to be AMD, so even though alot of packages support AMD, they weren&#39;t loading as AMDs, unless I specifically set the <code>meta: { format: &quot;amd&quot; }</code></p>
+</li>
+<li><h2 id="modules-only-export-one-file-but-in-reality-have-many">Modules only export one file, but in reality have many</h2>
+<p>A very common scenario is to get a widget that has both JavaScript and CSS components, maybe with some templates, or additional theme CSS. Bower is at fault here too, as both <code>bower.json</code> and <code>package.json</code> have a <code>main</code> that is a single string, so you only get one item to export. Additional requirements need to be added by hand. This took an hour or too to port from the <code>gruntfile</code>.</p>
+</li>
+<li><h2 id="semantic-version-ranges-are-not-possible">Semantic Version ranges are not possible</h2>
+<p> Packages are saved to disk in the format <code>jspm_packages/&lt;registry&gt;/&lt;package&gt;@&lt;version&gt;/</code>. While you can install them with your favorite semver flags like <code>^2.1.0</code>, <code>~3.4.2</code>, etc, they will be resolved and written to disk and <code>config.js</code> with the specific version. So if you do want to take patch updates without thinking about it, too bad. Conversely, Bower supports this well.</p>
+</li>
+<li><h2 id="full-package-name-must-be-specified-in-meta-">Full package name must be specified in <code>meta</code></h2>
+<p>Given the above points, we&#39;ll be manually editing our <code>config.js</code> alot, so it&#39;d be nice just to go </p>
+<pre><code class="lang-javascript">{
+  <span class="hljs-attribute">meta</span>: {
+    angular: {
+      deps: [<span class="hljs-string">'jquery'</span>]
+    }
+  }
+}
+</code></pre>
+<p>as <code>angular</code> is mapped in <code>paths</code> to be whatever specific registry and version it is you chose it, but nope. It has to be the fully qualified name</p>
+<pre><code class="lang-javascript">{
+  <span class="hljs-attribute">meta</span>: {
+    <span class="hljs-string">'bower:angular@1.3.2'</span>: {
+      deps: [<span class="hljs-string">'jquery'</span>]
+    }
+  }
+}
+</code></pre>
+<p>and when you upgrade it, of course you get to manually update it. Don&#39;t forget or your app will break.</p>
+<ol>
+<li><h2 id="systemjs-builder-is-buggy-and-broken">SystemJS builder is buggy and broken</h2>
+Simply trying <code>var builder = new Builder()</code> <a href="https://github.com/systemjs/builder/issues/225#issuecomment-120553357">blew up in gulp</a>, not to mention <code>baseURL</code> that worked in the browser <a href="https://github.com/systemjs/builder/issues/224#issuecomment-120551438">had to be transformed to work in both node and the browser</a>. But I still can&#39;t even <a href="https://github.com/systemjs/builder/issues/223">get paths to match properly</a> which is a blocker for me. I didn&#39;t have to do this with RequireJS on a previous project.</li>
+</ol>
+</li>
+</ol>
+<h2 id="conclusion">Conclusion</h2>
+<p>With so many package managers and registries out there now, as much as I like to goals and ambitions, is just causing more confusion and hurt given the many other package management and module systems (<a href="http://requirejs.org/">RequireJS</a>, <a href="http://browserify.org/">Browserify</a>, <a href="http://webpack.github.io/">Webpack</a>, <a href="http://componentjs.com/features.html">ComponentJS</a>, <a href="http://stealjs.com/docs/StealJS.why.html">StealJS</a>). rather than working with Bower and RequireJS teams or building on their work, it <a href="https://xkcd.com/927/">forks and diverges the community</a>.</p>
+</div><ul class="tags"><li><a href="/tag/jspm">jspm</a></li><li><a href="/tag/systemjs">systemjs</a></li><li><a href="/tag/front-end">front-end</a></li><li><a href="/tag/package managers">package managers</a></li><li><a href="/tag/modules">modules</a></li></ul></section></article><script src="/site.f9fb8d4.js"></script></body></html>
