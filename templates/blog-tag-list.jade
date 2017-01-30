@@ -1,0 +1,9 @@
+extends shell
+
+block content
+  h2.tag #{tag}
+  each article in articles
+    +post-summary(article)
+
+block title
+  | ##{tag} - Nathan Black

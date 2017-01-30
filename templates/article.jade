@@ -1,0 +1,15 @@
+extends shell
+
+block content
+  span.date #{article.date.format("dddd, MMMM Do YYYY")}
+  section.post
+    h1= article.title
+    div.content
+      != article.body
+    ul.tags
+      - each tag in article.tags
+        li
+          a(href="/tag/#{tag}") #{tag}
+
+block title
+  | #{article.title} - Nathan Black

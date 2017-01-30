@@ -1,0 +1,243 @@
+@import "reset"
+@import "tomorrow-night"
+
+global-reset()
+html5-reset()
+
+primary-color = #23BDBE
+primary-color-dark = #20a0a1
+secondary-color = #CCA5F0
+secondary-color-dark = #A775D4
+medium-gray = #666
+
+header-font = "Nobile"
+text-color = white
+subtle-text-color = #969896
+
+text-size = 14px
+title-size = 18px
+extra-large-spacer = 18px
+large-spacer = 10px
+small-spacer = 3px
+medium-spacer = 6px
+
+phone-width = 400px
+
+smartphoneWidth = 748px
+tabletWidth     = 1012px
+
+mqPhone = "only screen and (max-width: 700px)"
+mqSmallPhone = "only screen and (max-width: 320px)"
+
+icon-size = 24px
+bordered-icon(icon-size = 24px, icon-padding = 4px)
+  display inline-block
+  box-sizing content-box
+  border 1px solid
+  border-radius icon-size
+  padding icon-padding
+  width icon-size
+  line-height icon-size
+  vertical-align middle
+  text-align center
+  margin-right .5em
+  &:focus, &:hover
+    border-color secondary-color
+  &::before
+    font-family 'FontAwesome'
+
+tag-icon()
+  font-family 'FontAwesome'
+  content '\f02b'
+  padding-right: .4em
+
+@font-face
+  font-family: 'FontAwesome'
+  src: url('//netdna.bootstrapcdn.com/font-awesome/4.0.3/fonts/fontawesome-webfont.eot?v=4.0.3');
+  src: url('//netdna.bootstrapcdn.com/font-awesome/4.0.3/fonts/fontawesome-webfont.eot?#iefix&v=4.0.3') format('embedded-opentype'), url('//netdna.bootstrapcdn.com/font-awesome/4.0.3/fonts/fontawesome-webfont.woff?v=4.0.3') format('woff'), url('//netdna.bootstrapcdn.com/font-awesome/4.0.3/fonts/fontawesome-webfont.ttf?v=4.0.3') format('truetype'), url('//netdna.bootstrapcdn.com/font-awesome/4.0.3/fonts/fontawesome-webfont.svg?v=4.0.3#fontawesomeregular') format('svg');
+  font-weight: normal
+  font-style: normal
+
+*
+  box-sizing border-box
+
+a, a:visited
+  color primary-color
+  text-decoration none
+  transition color 50ms
+  transition border-color 50ms
+  &:hover, &:focus
+    color primary-color-dark
+
+h1, h2, h3, h4, h5
+  font-weight 400
+  font-family header-font
+  line-height 1.3em
+
+h1, h2
+  font-size title-size
+
+h3
+  font-size 14px
+
+p, span, a, li
+  line-height 1.5em
+
+pre code
+  display block
+code
+  font-size 14px
+  border-radius 6px
+  background #1d1f21
+  font-family Menlo, Monaco, Consolas, monospace
+  line-height 1.2
+  padding medium-spacer
+  margin medium-spacer 0
+
+input
+  padding @small-spacer
+  border 1px solid secondary-color
+  border-radius 3px
+  font-size text-size
+  line-height 1.3em
+
+body
+  font-family Roboto,Helvetica
+  font-weight 300
+  background-color #2e2e2e
+  color text-color
+  margin 0
+
+logo-size = 80px
+body > header
+  border-bottom 2px solid secondary-color
+  background-color medium-gray
+  padding 1em 0
+  @media mqPhone
+    padding 0.5em 0
+  margin-bottom: extra-large-spacer
+  .logo, h2, h4, aside
+    display inline-block
+  .logo
+    width logo-size*2
+    height logo-size*2
+    border-radius logo-size*2
+    left 0 - logo-size
+    top 0 - logo-size
+    border 2px solid secondary-color
+    overflow hidden
+    position absolute
+    img
+      position absolute
+      top 52px
+      left 59px
+    @media mqPhone
+      display none
+  aside
+    float right
+    margin-right: 2%
+    a, a:visited, a:hover, a:focus, a:visited::before
+      color text-color
+      border-color text-color
+    a
+      font-size 18px
+      margin-right small-spacer
+    @media mqSmallPhone
+      margin-right small-spacer
+      a
+        margin-bottom small-spacer
+      width icon-size*3
+
+  h2
+    font-size 24px
+    span
+      font-weight 400
+      color text-color
+    span.name
+      font-weight 700
+  h4
+    margin-left: 2em
+    font-size 12px
+    @media mqPhone
+      margin-left medium-spacer
+
+body > article
+  @media only screen and (min-width: 1076px)
+    width 60%
+  h1, h2, h3
+    margin: .7em 0
+  .post-summary h1
+    margin-top 0.3em
+  p, ul
+    margin-bottom large-spacer
+  h2.tag
+    color secondary-color
+    &::before
+      tag-icon()
+
+body > header h2, body > article
+  margin-left logo-size + 14px
+  @media mqPhone
+    margin-left medium-spacer
+
+aside.github
+  float right
+  width 30%
+  @media only screen and (max-width: 1076px)
+    display none
+  li
+    margin-bottom .5em
+  h2 a
+    color secondary-color
+    &:hover, &:focus
+      color secondary-color-dark
+
+
+ul.tags
+  list-style: none
+  margin 0.5em 0
+  li
+    display inline-block
+    margin-right 1em
+    a::before
+      tag-icon()
+    a:hover, a:focus
+      color primary-color
+      &::before
+        color secondary-color-dark
+
+a.github, a.gplus, a.email
+  bordered-icon()
+  @media mqPhone
+    bordered-icon(18px)
+    font-size 14px
+
+a.github::before
+  content '\f113'
+a.gplus::before
+  content '\f0d5'
+a.email::before
+  content '\f0e0'
+
+section.post-summary
+  margin-bottom: 2em
+span.date
+  color subtle-text-color
+  font-size 90%
+
+.npm-diff
+  label
+    display inline-block
+    width 40%
+  input
+    width 60%
+  form
+    display block
+    width 400px
+  a.compare
+    display inline-block
+    margin-top small-spacer
+  .left
+    color primary-color
+  .right
+    color secondary-color

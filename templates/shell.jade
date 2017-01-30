@@ -1,0 +1,51 @@
+mixin post-summary(article)
+  section.post-summary
+    span.date #{article.date.calendar()}
+    h1
+      a(href="/post/#{article.slug}")= article.title
+    article
+      != article.summary
+    ul.tags
+      - each tag in article.tags
+        li
+          a(href="/tag/#{tag}") #{tag}
+
+doctype html
+html
+  head
+    title
+      block title
+    meta(charset='utf-8')
+    meta(name='description', content='A blog about modern web development, from front end to Node.js, JavaScript, styling, testing, and software development practices')
+    meta(name='viewport', content='width=device-width')
+    link(rel="stylesheet" href="/#{siteStyles}")
+    link(rel='stylesheet', href='//fonts.googleapis.com/css?family=Roboto:300,400|Raleway|Nobile:400,700')
+  body
+    header
+      aside
+        a.github(href='https://github.com/nathanboktae')
+        a.gplus(href='https://plus.google.com/+NathanBlackJ')
+        a.email(href='mailto:nathan@nathanblack.org')
+      .logo
+        img(src='//gravatar.com/avatar/f78c2c988486648311bcf116070e2487.jpg?s=110')
+      h2
+        a(href='/')
+          span.name nathanblack
+          span .org
+      h4 Refining Modern Web Development
+
+    aside.github
+      h2
+        a(href='https://github.com/nathanboktae')
+          b @
+          | nathanboktae
+      ul.events(data-bind='foreach: events')
+        li(data-bind='attr: { class: type }')
+          span.date(data-bind='text: when')
+          h3(data-bind='html: summary')
+          p(data-bind='text: $data.details')
+
+    article
+      block content
+
+    script(src="/#{siteScript}")
