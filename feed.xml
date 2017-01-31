@@ -2,10 +2,32 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>http://nathanblack.org</id>
     <title>Nathan Black&apos;s Blog</title>
-    <updated>2016-12-10T00:00:00Z</updated>
+    <updated>2017-01-30T00:00:00Z</updated>
     <link rel="alternate" href="http://nathanblack.org"/>
     <logo>http://nathanblack.org/favicon.png</logo>
     <generator>Feed for Node.js</generator>
+    <entry>
+        <title type="html"><![CDATA[Don't Mock Your Code - The Behavior is the Unit]]></title>
+        <id>http://nathanblack.org/post/dont-mock-your-code-the-behavior-is-the-unit</id>
+        <link href="http://nathanblack.org/post/dont-mock-your-code-the-behavior-is-the-unit">
+        </link>
+        <updated>2017-01-30T00:00:00Z</updated>
+        <author>
+            <name>Nathan Black</name>
+            <uri>http://nathanblack.org/</uri>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Migration to a static site: Experience with Metalsmith vs Gulp]]></title>
+        <id>http://nathanblack.org/post/migration-to-static-site-via-gulp</id>
+        <link href="http://nathanblack.org/post/migration-to-static-site-via-gulp">
+        </link>
+        <updated>2017-01-29T00:00:00Z</updated>
+        <author>
+            <name>Nathan Black</name>
+            <uri>http://nathanblack.org/</uri>
+        </author>
+    </entry>
     <entry>
         <title type="html"><![CDATA[Semantic Web Component Design: Radios, dropdowns, and tabs are the same thing]]></title>
         <id>http://nathanblack.org/post/semantic-web-component-design-dropdowns-tabs-radios-are-the-same-thing</id>

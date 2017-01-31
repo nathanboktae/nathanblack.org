@@ -2,10 +2,83 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>http://nathanblack.org</id>
     <title>Nathan Black&apos;s Blog</title>
-    <updated>2016-12-10T00:00:00Z</updated>
+    <updated>2017-01-30T00:00:00Z</updated>
     <link rel="alternate" href="http://nathanblack.org"/>
     <logo>http://nathanblack.org/favicon.png</logo>
     <generator>Feed for Node.js</generator>
+    <entry>
+        <title type="html"><![CDATA[Don't Mock Your Code - The Behavior is the Unit]]></title>
+        <id>http://nathanblack.org/post/dont-mock-your-code-the-behavior-is-the-unit</id>
+        <link href="http://nathanblack.org/post/dont-mock-your-code-the-behavior-is-the-unit">
+        </link>
+        <updated>2017-01-30T00:00:00Z</updated>
+        <summary type="html"><![CDATA[<p>I first started really utilizing unit testing and test-driven development while on the <a href="http://web.archive.org/web/20120205035354/https://datamarket.azure.com/">DataMarket</a> team at Microsoft was slowing migrating an ASP.NET WebForms app to MVC. In a team that had no tests maintained by developers (<em>shudder</em> how did we develop software this long?) it was a big cultural change led by my great colleages <a href="https://github.com/jonsequitur">Jon Sequiera</a> and <a href="https://www.linkedin.com/in/dfrenkel">Dmitry Frenkel</a>, who I am very greatful to have the experience of working with.</p>
+<p>At the time we&#39;d write tests for our controllers. We&#39;d mock out all the dependencies it would need in a test and provide them. We were also using the <a href="">repository pattern</a> and testing the controller we&#39;d mock that out. The repository pattern was really needed as we couldn&#39;t actually make a call to the database due to a lot of different reasons that basically stem from a monolithic ball of sphagetti code and abomination that was <a href="http://www.ben-morris.com/entity-framework-anti-patterns-how-not-to-use-an-orm-with-sql-server/">Entity Framework 1.0</a>.</p>
+<p>That was nice to get developers used to writing tests for their code, but there was a lot of problems with that. Views were not tested at all, due to Razor being untestable at the time (some 32bit vs 64bit issue on the build server or something, see previous comment on monolithic ball of sphagetti). We had bugs in our view not being rendered. Razor was also very logic heavy, and a few abominations were created. Writing new tests required about 3x the mocking code than code that actually did the assertions. Model binding had no tests - you&#39;d know about it 3 days later (maybe) when a tester ran their test suite, or worse, your manager was trying something on the development environment. Forgot a dependency injection registration that you mocked out? App won&#39;t boot at all despite your tests passing. Moreover, when I want to refactor code to move more logic into the controller from the repository that had to much (that had no tests on it), I have to refactor a whole quite of tests. How can we rely on these tests when it still has these huge gaps and maintence problems?</p>
+<p>A new approach and that can be referred to behavior-driven development or black box testing is testing the functionality or contracts of the service or app. Essentially all the code that is in that git repo, test that it&#39;s contracts with things outside of it (users, other services it depends on or the API service it has), test those behaviors without mocking any code inside that repository, only other services / interfaces that it depends on (An AWS service, browser ajax calls, etc.) If possible avoid those too - for example, don&#39;t mock your database or Redis - run the server locally, bootstrap it, run the real migrations or whatever, and run your tests.</p>
+<p><a href="https://github.com/visionmedia/supertest">supertest</a> and <a href="http://www.davidwhitney.co.uk/Blog/2015/01/07/testing-an-asp-net-webapi-app-in-memory/">ASP.NET WebApi</a> are great in doing this sort of testing for an API server. Start your app, build a request, and assert the response. Make a few calls in a test or nest tests for testing a complicated scenario.</p>
+<pre><code class="lang-javascript">const app = require(&#39;../app&#39;),
+      supertest = require(&#39;co-supertest&#39;)(app.listen() /* koa app */)
+
+describe(&#39;Logging in&#39;, function() {
+  it(&#39;should return 401 given invalid credentials&#39;, function() {
+    return supertest(app)
+      .post(&#39;/users&#39;)
+      .send({
+        email: &#39;bob@gmail.com&#39;,
+        password: &#39;1234&#39;
+      })
+      .set(&#39;Accept&#39;, &#39;application/json&#39;)
+      .expect(401)
+      .expect({
+        message: &#39;Invalid Credentials&#39;
+      })
+      .end()
+  })
+})
+</code></pre>
+<p>How simple is that? Of course before this, test data is seeded into the database, and depedant services that are not mocked are started and seeded, like a local redis instance, or a test SQS topic.</p>
+<p>What about client code? Opening and closing a browser for every test is not practical. For the rewrite of the portal at Appuri, I had our test bootstrap the entire application and mount it in a <code>div</code> that is not mounted in the DOM by default. Not mounting it in the DOM makes it faster, and also will fail any code that does a global selector (<code>document.body.querySelector[All]</code>), which is very nice. After the test is done, the div is thrown away. Every test instance gets a new appilcation instance and new DOM root for isolation. It&#39;s more heavy weight than unit tests of course, but much less than a Selenium or even a <a href="https://github.com/nathanboktae/mocha-casperjs">mocha-casperjs</a> test.</p>
+<p>After using this approach for a year, and getting two other developers up to speed on it, I&#39;m very happy with the results. Functional regressions are extremely rare, and usually due to a missing test or test bug, which is fixed along with the bug fix!</p>
+]]></summary>
+        <author>
+            <name>Nathan Black</name>
+            <uri>http://nathanblack.org/</uri>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Migration to a static site: Experience with Metalsmith vs Gulp]]></title>
+        <id>http://nathanblack.org/post/migration-to-static-site-via-gulp</id>
+        <link href="http://nathanblack.org/post/migration-to-static-site-via-gulp">
+        </link>
+        <updated>2017-01-29T00:00:00Z</updated>
+        <summary type="html"><![CDATA[<p>I <a href="/post/the-beginning">started this site</a> using <a href="http://jsantell.github.io/poet/">poet</a> on top of <a href="http://nodejs.org/">node.js</a> and <a href="http://expressjs.com/">express</a>, mainly wanting to expand my node skills and use my free Azure credits I got as a Microsoft employee. Azure Websites, the Heroku-like PaaS had just launched (now called <a href="https://azure.microsoft.com/en-us/services/app-service/">App Services</a>). It was a nice experience.</p>
+<p>Later on while working at <a href="https://www.crunchbase.com/organization/appuri#/entity">Appuri</a>, we decided to move our public website off of Hubspot as it was a nightmare for our talented designer, <a href="https://www.linkedin.com/in/jeffreynoldz">Jeff Reynolds</a>, who knew HTML and CSS, to work in. It would need marketing functionality, but we took the approach that whatever we needed could be provided via a 3rd party JavaScript tag on the client. So we didn&#39;t need a server at all. We could simply serve it from an <a href="http://docs.aws.amazon.com/AmazonS3/latest/dev/WebsiteHosting.html">S3 bucket</a> cheaply and it will always be up. <a href="https://circleci.com">Circle CI</a> would build the site and sync the bucket.</p>
+<p>So how to build it? I initially looked at <a href="http://www.metalsmith.io/">Metalsmith</a> that was focused on building these sites, that had all the speciallized packages needed like <a href="https://github.com/segmentio/metalsmith-permalinks">metalsmith-permalinks</a>, <a href="https://www.npmjs.com/package/metalsmith-feed-atom">metalsmith-feed-atom</a>, etc. and YAML front matter as a first class citizen. But I had issues:</p>
+<ul>
+<li><p>Metalsmith processes all files together, unlike gulp which streams files. A lot of work on static sites requires an aggregate functionality (reorder posts by publish date, count blog entries by tag, build a sitemap, etc.) But you can always go to aggregates from a stream - you can&#39;t stream after you&#39;ve sucked in the whole world. This mainly breaks the <a href="">browser-sync</a> flow where CSS changes could be injected without a page refresh. Instead the whole world runs again. This is a huge dealbeaker and what caused me to switch to gulp.</p>
+</li>
+<li><p>Gulp has all those plugins for a static site, and more. <a href="https://www.npmjs.com/package/gulp-markdown-to-json">gulp-markdown-to-json</a> for transforming markdown with yaml front-matter, <a href="https://www.npmjs.com/package/gulp-pretty-url">gulp-pretty-url</a> for permalinks (or see below for my 6-liner using <a href="https://www.npmjs.com/package/gulp-rename">gulp-rename</a>), and all the other standard CSS and asset processing packages you would expect. Metalsmith is lacking in this respect (thus <a href="https://www.npmjs.com/package/gulpsmith">gulpsmith</a> exists)</p>
+</li>
+</ul>
+<pre><code class="lang-javascript">const permalink = () =&gt; rename(function(file) {
+  if (file.extname === &#39;.html&#39; &amp;&amp; file.basename !== &#39;index&#39;) {
+    file.dirname = path.join(file.dirname, file.basename)
+    file.basename = &#39;index&#39;
+  }
+  return file
+})
+</code></pre>
+<ul>
+<li>No concepts of tasks. Just want to re-optomize those SVGs? Build the whole world again!</li>
+</ul>
+<p>So I realized that Metalsmith was just a poor gulp implementation, and redid it with gulp packages and some simple custom tasks around other core packages (e.g. used <a href="https://www.npmjs.com/package/feed">feed</a> directly instead of <code>gulp-rss</code>). This method has been working really well at Appuri, so I did it here too, using <a href="https://pages.github.com/">GitHub pages</a>.</p>
+]]></summary>
+        <author>
+            <name>Nathan Black</name>
+            <uri>http://nathanblack.org/</uri>
+        </author>
+    </entry>
     <entry>
         <title type="html"><![CDATA[Semantic Web Component Design: Radios, dropdowns, and tabs are the same thing]]></title>
         <id>http://nathanblack.org/post/semantic-web-component-design-dropdowns-tabs-radios-are-the-same-thing</id>
@@ -280,20 +353,6 @@ import raspberries
 <p>This is definately a change in culture, as though I didn&#39;t use Rails much, but that community likes it&#39;s big frameworks that do a lot of magic. Which is nice until you disagree with an aspect of that magic, or need to tweak it or swap it out with something else for this one scenario.</p>
 <p>A great <a href="https://twitter.com/jonsequitur">coworker</a> of mine once told me &quot;The key to complexity is composition&quot;, which I have experienced to be true.
 <!--more--></p>
-]]></summary>
-        <author>
-            <name>Nathan Black</name>
-            <uri>http://nathanblack.org/</uri>
-        </author>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[The Beginning]]></title>
-        <id>http://nathanblack.org/post/the-beginning</id>
-        <link href="http://nathanblack.org/post/the-beginning">
-        </link>
-        <updated>2014-03-30T00:00:00Z</updated>
-        <summary type="html"><![CDATA[<p>After owning nathanblack.org for several years and doing web development, it&#39;s long overdue I have a blog with a few thoughts to share about web development.</p>
-<p>This blog is powered by <a href="http://jsantell.github.io/poet/">poet</a> on top of <a href="http://nodejs.org/">node.js</a> and <a href="http://expressjs.com/">express.js</a>, with <a href="http://learnboost.github.io/stylus/">stylus</a> for the CSS preprocessor, but most importantly no jQuery and no bootstrap.</p>
 ]]></summary>
         <author>
             <name>Nathan Black</name>
