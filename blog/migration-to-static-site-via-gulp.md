@@ -1,5 +1,5 @@
 ---
-title: Migration to a static site: Experience with Metalsmith vs Gulp
+title: "Migration to a static site: Experience with Metalsmith vs Gulp"
 tags: nodejs, circle-ci, gulp
 date: 2017-01-29
 ---
