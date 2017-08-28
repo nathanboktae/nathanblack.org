@@ -21,7 +21,9 @@
 
       beforeEach(() => {
         testEl = document.createElement('div')
-        document.body.appendChild(testEl)
+        if (window.location.search.indexOf('attach') !== -1) {
+          document.body.appendChild(testEl)
+        }
         ReactDOM.render(React.createElement(DummyComp, { greet: "hi" }), testEl)
       })
 
