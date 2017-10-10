@@ -1,65 +1,65 @@
 .tomorrow-comment,
-pre .hljs-comment,
-pre .hljs-title {
+pre .comment,
+pre .title {
   color: #969896;
 }
 .tomorrow-red,
-pre .hljs-variable,
-pre .hljs-attribute,
-pre .hljs-tag,
-pre .hljs-regexp,
-pre .hljs-ruby .constant,
-pre .hljs-xml .tag .title,
-pre .hljs-xml .pi,
-pre .hljs-xml .doctype,
-pre .hljs-html .doctype,
-pre .hljs-css .id,
-pre .hljs-css .class,
-pre .hljs-css .pseudo {
+pre .variable,
+pre .attribute,
+pre .tag,
+pre .regexp,
+pre .ruby .constant,
+pre .xml .tag .title,
+pre .xml .pi,
+pre .xml .doctype,
+pre .html .doctype,
+pre .css .id,
+pre .css .class,
+pre .css .pseudo {
   color: #c66;
 }
 .tomorrow-orange,
-pre .hljs-number,
-pre .hljs-preprocessor,
-pre .hljs-built_in,
-pre .hljs-literal,
-pre .hljs-params,
-pre .hljs-constant {
+pre .number,
+pre .preprocessor,
+pre .built_in,
+pre .literal,
+pre .params,
+pre .constant {
   color: #de935f;
 }
 .tomorrow-yellow,
-pre .hljs-class,
-pre .hljs-ruby .class .title,
-pre .hljs-css .rules .attribute {
+pre .class,
+pre .ruby .class .title,
+pre .css .rules .attribute {
   color: #f0c674;
 }
 .tomorrow-green,
-pre .hljs-string,
-pre .hljs-value,
-pre .hljs-inheritance,
-pre .hljs-header,
-pre .hljs-ruby .symbol,
-pre .hljs-xml .cdata {
+pre .string,
+pre .value,
+pre .inheritance,
+pre .header,
+pre .ruby .symbol,
+pre .xml .cdata {
   color: #b5bd68;
 }
 .tomorrow-aqua,
-pre .hljs-css .hexcolor {
+pre .css .hexcolor {
   color: #8abeb7;
 }
 .tomorrow-blue,
-pre .hljs-function,
-pre .hljs-python .decorator,
-pre .hljs-python .title,
-pre .hljs-ruby .function .title,
-pre .hljs-ruby .title .keyword,
-pre .hljs-perl .sub,
-pre .hljs-javascript .title,
-pre .hljs-coffeescript .title {
+pre .function,
+pre .python .decorator,
+pre .python .title,
+pre .ruby .function .title,
+pre .ruby .title .keyword,
+pre .perl .sub,
+pre .javascript .title,
+pre .coffeescript .title {
   color: #81a2be;
 }
 .tomorrow-purple,
-pre .hljs-keyword,
-pre .hljs-javascript .function {
+pre .keyword,
+pre .javascript .function {
   color: #b294bb;
 }
 code {
@@ -384,7 +384,7 @@ ul.tags li a:focus::before {
   color: #a775d4;
 }
 a.github,
-a.linkedin,
+a.gplus,
 a.email {
   display: inline-block;
   box-sizing: content-box;
@@ -398,21 +398,21 @@ a.email {
   margin-right: 0.5em;
 }
 a.github:focus,
-a.linkedin:focus,
+a.gplus:focus,
 a.email:focus,
 a.github:hover,
-a.linkedin:hover,
+a.gplus:hover,
 a.email:hover {
   border-color: #cca5f0;
 }
 a.github::before,
-a.linkedin::before,
+a.gplus::before,
 a.email::before {
   font-family: 'FontAwesome';
 }
 @media only screen and (max-width: 700px) {
   a.github,
-  a.linkedin,
+  a.gplus,
   a.email {
     display: inline-block;
     box-sizing: content-box;
@@ -427,15 +427,15 @@ a.email::before {
     font-size: 14px;
   }
   a.github:focus,
-  a.linkedin:focus,
+  a.gplus:focus,
   a.email:focus,
   a.github:hover,
-  a.linkedin:hover,
+  a.gplus:hover,
   a.email:hover {
     border-color: #cca5f0;
   }
   a.github::before,
-  a.linkedin::before,
+  a.gplus::before,
   a.email::before {
     font-family: 'FontAwesome';
   }
@@ -443,18 +443,14 @@ a.email::before {
 a.github::before {
   content: '\f113';
 }
-a.linkedin::before {
-  content: '\f0e1';
+a.gplus::before {
+  content: '\f0d5';
 }
 a.email::before {
   content: '\f0e0';
 }
 section.post-summary {
   margin-bottom: 2em;
-}
-section.post-summary.truncated article > *:last-child::after {
-  content: ' [...]';
-  color: #666;
 }
 span.date {
   color: #969896;
@@ -482,4 +478,4 @@ span.date {
   color: #cca5f0;
 }
 
-/*# sourceMappingURL=site.b7837c4.css.map */
+/*# sourceMappingURL=site.css.map */

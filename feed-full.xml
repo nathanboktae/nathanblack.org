@@ -2,10 +2,50 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>http://nathanblack.org</id>
     <title>Nathan Black&apos;s Blog</title>
-    <updated>2017-01-30T00:00:00Z</updated>
+    <updated>2017-10-08T00:00:00Z</updated>
     <link rel="alternate" href="http://nathanblack.org"/>
     <logo>http://nathanblack.org/favicon.png</logo>
     <generator>Feed for Node.js</generator>
+    <entry>
+        <title type="html"><![CDATA[CSS in JavaScript is a horrible idea]]></title>
+        <id>http://nathanblack.org/post/css-in-js-is-a-horrible-idea</id>
+        <link href="http://nathanblack.org/post/css-in-js-is-a-horrible-idea">
+        </link>
+        <updated>2017-10-08T00:00:00Z</updated>
+        <summary type="html"><![CDATA[<p>There is a lot of buzz around CSS in JS these days as Facebook champions it for React. There are some fundamental problems with this I would like to address.</p>
+<p>Why were cascading style sheets created? Before them, all styles were inline. Remember when we had to write <code>&lt;table bgcolor=&quot;#ffde09&quot;&gt;...</code> and such? What happened when you wanted to change all your text colors? You had to find all the references manually and change them! A global file search and replace wasn&#39;t good enough as maybe this black was for a border instead of text... it was a nightmare.</p>
+<p>Enter CSS. Now you could declare your text, fonts, margins and borders with a default global setting, and override them in specific circumstances as needed. <em>It&#39;s about design, not code</em>.</p>
+<h3 id="design-and-users-love-consistency">Design and Users love consistency</h3>
+<p>Good UX and design love consistency. Users get confused if a primary CTA button looks different on this page or component. Globals are good in design. They are not in code.</p>
+<h3 id="styling-and-functionality-are-separate-concerns">Styling and functionality are separate concerns</h3>
+<p>How a page or component looks and operates is wholly separate from how it functions. Your table grid shouldn&#39;t care about the font face, background, or cell spacing it has. It should care about how it wires up data and renders the contents, and providing a useful API. With clean, sematic HTML the user&#39;s existing design will simply <em>cascade</em> and inherit styles.</p>
+<h3 id="css-is-a-layout-rules-engine-not-code">CSS is a layout rules engine, not code</h3>
+<p>Many of the good software design principles don&#39;t apply to CSS because it&#39;s not code, but a layout engine. With a good DSL (see the next point) you can blend extra principles like composibility and refactoring in, but there is no high order functions, dependecy injection, visitor pattern, etc stuff to apply.</p>
+<h3 id="mature-css-processors-have-been-addressing-limitations-in-css-for-years">Mature CSS Processors have been addressing limitations in CSS for years</h3>
+<p>We&#39;ve had many successful years of using SASS, LESS, Stylus, and the new kid PostCSS. These great robust DSLs have many features and plugins to address whatever need the CSS-in-JS community thinks can&#39;t be solved. Let&#39;s <a href="https://speakerdeck.com/vjeux/react-css-in-js">go through them</a></p>
+<ol>
+<li><em>Global Namespace</em> I addressed why this is good for design and UX previously.</li>
+<li><em>Dependencies</em>. Webpack users have been able to <code>require()</code> CSS dependencies and <a href="https://webpack.github.io/docs/stylesheets.html">bundle them together</a> for a long time.</li>
+<li><em>Dead Code Elimination</em> Webpack 2+ <a href="https://webpack.js.org/guides/tree-shaking/">supports tree shaking</a> to elmitate dead CSS dependencies at the component level. Andy Osami shows how you can <a href="https://addyosmani.com/blog/removing-unused-css/">remove unused rules and add it to you build system</a>. The Chrome dev tools feature an <a href="http://meeech.amihod.com/very-useful-find-unused-css-rules-with-google/">Audit tab</a> that can reveal unused rules.</li>
+<li><em>Minification</em> <a href="https://github.com/yui/yuicompressor">YUI compressor</a> has been around for years. Combined with gzip, HTTP2, and CDN caching, this is no reason at all to flip the table on everything. Performance is an ongoing arms race that <a href="http://stefankrause.net/js-frameworks-benchmark4/webdriver-ts/table.html">react is already loosing</a>.</li>
+<li><em>Sharing Constants</em> I&#39;ve always created a <code>definitions.styl</code> that contained all my variables and mixins, and included it at every script. Very trivial.</li>
+<li><em>Non-deterministic Resolution</em> Pure FUD. CSS Specificity is very deterministic. A great analogy to learn this was to <a href="https://www.smashingmagazine.com/2007/07/css-specificity-things-you-should-know/">compare it to poker</a>.</li>
+<li><em>Isolation</em>. You can organize your stylesheets however you like and use <code>import</code> in CSS and <code>require()</code> from JavaScript via Webpack / browserify. Also putitng styling concerns in JavaScript creates higher coupling and <em>reduces</em> isolation.</li>
+</ol>
+<h3 id="fighting-against-web-standards-is-a-loosing-battle">Fighting against web standards is a loosing battle</h3>
+<p>JavaScript frameworks come and go. CSS has been a standard since the dawn of the century. Want to integrate with that <a href="https://dbushell.com/Pikaday/">great datepicker written in plain JavaScript</a>? Well it uses classes (that you can read!) so you need CSS. Psuedoelements, psuedoclasses, CSS variables, and animations all require stylesheets.</p>
+<h3 id="you-still-need-to-learn-css">You still need to learn CSS</h3>
+<blockquote>
+<p>When I&#39;m saying at scale, it means a codebase with hundreds of developers comming code everyday where most of them are not front-end developers</p>
+</blockquote>
+<p>There in lies your problem. It&#39;s a human and cultural problem you&#39;re trying to solve with technology. The nature of the web and browser, learning good UX patterns, learning how to layout a page and have it be responsive to dynamic content and varying screen sizes, to reconsicle a stateful UI running in an untrusted context with a stateless server API that runs in a trusted context, security attacks, expressing a design language in a semantic way that&#39;s maintainable, etc, etc, is not something that simply goes away. It must be learned to create amazing web experiences and iterate fast on them.</p>
+<p>If you care about good a user experience, separation of concerns, and having a maintainable code base aligned with web standards, please, keep your styling in CSS.</p>
+]]></summary>
+        <author>
+            <name>Nathan Black</name>
+            <uri>http://nathanblack.org/</uri>
+        </author>
+    </entry>
     <entry>
         <title type="html"><![CDATA[Don't Mock Your Code - The Behavior is the Unit]]></title>
         <id>http://nathanblack.org/post/dont-mock-your-code-the-behavior-is-the-unit</id>
@@ -14,8 +54,7 @@
         <updated>2017-01-30T00:00:00Z</updated>
         <summary type="html"><![CDATA[<p>I first started really utilizing unit testing and test-driven development while on the <a href="http://web.archive.org/web/20120205035354/https://datamarket.azure.com/">DataMarket</a> team at Microsoft was slowing migrating an ASP.NET WebForms app to MVC. In a team that had no tests maintained by developers (<em>shudder</em> how did we develop software this long?) it was a big cultural change led by my great colleages <a href="https://github.com/jonsequitur">Jon Sequiera</a> and <a href="https://www.linkedin.com/in/dfrenkel">Dmitry Frenkel</a>, who I am very greatful to have the experience of working with.</p>
 <p>At the time we&#39;d write tests for our controllers. We&#39;d mock out all the dependencies it would need in a test and provide them. We were also using the <a href="">repository pattern</a> and testing the controller we&#39;d mock that out. The repository pattern was really needed as we couldn&#39;t actually make a call to the database due to a lot of different reasons that basically stem from a monolithic ball of sphagetti code and abomination that was <a href="http://www.ben-morris.com/entity-framework-anti-patterns-how-not-to-use-an-orm-with-sql-server/">Entity Framework 1.0</a>.</p>
-<p>That was nice to get developers used to writing tests for their code, but there was a lot of problems with that. Views were not tested at all, due to Razor being untestable at the time (some 32bit vs 64bit issue on the build server or something, see previous comment on monolithic ball of sphagetti). We had bugs in our view not being rendered. Razor was also very logic heavy, and a few abominations were created. Writing new tests required about 3x the mocking code than code that actually did the assertions. Model binding had no tests - you&#39;d know about it 3 days later (maybe) when a tester ran their test suite, or worse, your manager was trying something on the development environment. Forgot a dependency injection registration that you mocked out? App won&#39;t boot at all despite your tests passing. Moreover, when I want to refactor code to move more logic into the controller from the repository that had to much (that had no tests on it), I have to refactor a whole quite of tests. How can we rely on these tests when it still has these huge gaps and maintence problems?
-<!--more--></p>
+<p>That was nice to get developers used to writing tests for their code, but there was a lot of problems with that. Views were not tested at all, due to Razor being untestable at the time (some 32bit vs 64bit issue on the build server or something, see previous comment on monolithic ball of sphagetti). We had bugs in our view not being rendered. Razor was also very logic heavy, and a few abominations were created. Writing new tests required about 3x the mocking code than code that actually did the assertions. Model binding had no tests - you&#39;d know about it 3 days later (maybe) when a tester ran their test suite, or worse, your manager was trying something on the development environment. Forgot a dependency injection registration that you mocked out? App won&#39;t boot at all despite your tests passing. Moreover, when I want to refactor code to move more logic into the controller from the repository that had to much (that had no tests on it), I have to refactor a whole quite of tests. How can we rely on these tests when it still has these huge gaps and maintence problems?</p>
 <p>A new approach and that can be referred to behavior-driven development or black box testing is testing the functionality or contracts of the service or app. Essentially all the code that is in that git repo, test that it&#39;s contracts with things outside of it (users, other services it depends on or the API service it has), test those behaviors without mocking any code inside that repository, only other services / interfaces that it depends on (An AWS service, browser ajax calls, etc.) If possible avoid those too - for example, don&#39;t mock your database or Redis - run the server locally, bootstrap it, run the real migrations or whatever, and run your tests.</p>
 <p><a href="https://github.com/visionmedia/supertest">supertest</a> and <a href="http://www.davidwhitney.co.uk/Blog/2015/01/07/testing-an-asp-net-webapi-app-in-memory/">ASP.NET WebApi</a> are great in doing this sort of testing for an API server. Start your app, build a request, and assert the response. Make a few calls in a test or nest tests for testing a complicated scenario.</p>
 <pre><code class="lang-javascript">const app = require(&#39;../app&#39;),
@@ -55,7 +94,7 @@ describe(&#39;Logging in&#39;, function() {
         <updated>2017-01-29T00:00:00Z</updated>
         <summary type="html"><![CDATA[<p>I <a href="/post/the-beginning">started this site</a> using <a href="http://jsantell.github.io/poet/">poet</a> on top of <a href="http://nodejs.org/">node.js</a> and <a href="http://expressjs.com/">express</a>, mainly wanting to expand my node skills and use my free Azure credits I got as a Microsoft employee. Azure Websites, the Heroku-like PaaS had just launched (now called <a href="https://azure.microsoft.com/en-us/services/app-service/">App Services</a>). It was a nice experience.</p>
 <p>Later on while working at <a href="https://www.crunchbase.com/organization/appuri#/entity">Appuri</a>, we decided to move our public website off of Hubspot as it was a nightmare for our talented designer, <a href="https://www.linkedin.com/in/jeffreynoldz">Jeff Reynolds</a>, who knew HTML and CSS, to work in. It would need marketing functionality, but we took the approach that whatever we needed could be provided via a 3rd party JavaScript tag on the client. So we didn&#39;t need a server at all. We could simply serve it from an <a href="http://docs.aws.amazon.com/AmazonS3/latest/dev/WebsiteHosting.html">S3 bucket</a> cheaply and it will always be up. <a href="https://circleci.com">Circle CI</a> would build the site and sync the bucket.</p>
-<p>So how to build it? <!--more--> I initially looked at <a href="http://www.metalsmith.io/">Metalsmith</a> that was focused on building these sites, that had all the speciallized packages needed like <a href="https://github.com/segmentio/metalsmith-permalinks">metalsmith-permalinks</a>, <a href="https://www.npmjs.com/package/metalsmith-feed-atom">metalsmith-feed-atom</a>, etc. and YAML front matter as a first class citizen. But I had issues:</p>
+<p>So how to build it? I initially looked at <a href="http://www.metalsmith.io/">Metalsmith</a> that was focused on building these sites, that had all the speciallized packages needed like <a href="https://github.com/segmentio/metalsmith-permalinks">metalsmith-permalinks</a>, <a href="https://www.npmjs.com/package/metalsmith-feed-atom">metalsmith-feed-atom</a>, etc. and YAML front matter as a first class citizen. But I had issues:</p>
 <ul>
 <li><p>Metalsmith processes all files together, unlike gulp which streams files. A lot of work on static sites requires an aggregate functionality (reorder posts by publish date, count blog entries by tag, build a sitemap, etc.) But you can always go to aggregates from a stream - you can&#39;t stream after you&#39;ve sucked in the whole world. This mainly breaks the <a href="">browser-sync</a> flow where CSS changes could be injected without a page refresh. Instead the whole world runs again. This is a huge dealbeaker and what caused me to switch to gulp.</p>
 </li>
@@ -336,24 +375,6 @@ import raspberries
 <!--more-->
 </li>
 </ul>
-]]></summary>
-        <author>
-            <name>Nathan Black</name>
-            <uri>http://nathanblack.org/</uri>
-        </author>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[Why node.js is Awesome, Part 1: The Single Responsibility Principle]]></title>
-        <id>http://nathanblack.org/post/why-nodejs-is-awesome-part1-single-responsiblity-principle</id>
-        <link href="http://nathanblack.org/post/why-nodejs-is-awesome-part1-single-responsiblity-principle">
-        </link>
-        <updated>2014-04-04T00:00:00Z</updated>
-        <summary type="html"><![CDATA[<p>My favorite thing about node.js and the npm community is something that can&#39;t easily be put on a spec sheet. It&#39;s adherance to the <a href="http://en.wikipedia.org/wiki/Single_responsibility_principle">single responsiblity principle</a>.</p>
-<p>Take a look at some of the <a href="https://www.npmjs.org/">most depnended on npm modules</a> - they&#39;re often very small, like <a href="https://www.npmjs.org/package/mkdirp">mkdirp</a>, which is simply <code>mkdir -p</code> in node. <a href="https://www.npmjs.org/package/glob">glob</a> matches files like a shell does. <a href="https://www.npmjs.org/package/node-uuid">node-uuid</a> just generates UUIDs.</p>
-<p>Is there a bug in the module? The module is small enough and tested well that you can dive in and help out, and send the bug fix as a pull request on GitHub. Don&#39;t like the design of the module your using, or development died out? Swap it out with a different module, and wire it up to your <a href="http://en.wikipedia.org/wiki/Loose_coupling">loosely coupled</a> system.</p>
-<p>This is definately a change in culture, as though I didn&#39;t use Rails much, but that community likes it&#39;s big frameworks that do a lot of magic. Which is nice until you disagree with an aspect of that magic, or need to tweak it or swap it out with something else for this one scenario.</p>
-<p>A great <a href="https://twitter.com/jonsequitur">coworker</a> of mine once told me &quot;The key to complexity is composition&quot;, which I have experienced to be true.
-<!--more--></p>
 ]]></summary>
         <author>
             <name>Nathan Black</name>
