@@ -12,6 +12,9 @@
         <link href="http://nathanblack.org/post/css-in-js-is-a-horrible-idea">
         </link>
         <updated>2017-10-08T00:00:00Z</updated>
+        <summary type="html"><![CDATA[<p>There is a lot of buzz around CSS in JS these days as Facebook champions it for React. There are some fundamental problems with this I would like to address.</p>
+<p>Why were cascading style sheets created? Before them, all styles were inline. Remember when we had to write <code>&lt;table bgcolor=&quot;#ffde09&quot;&gt;...</code> and such? What happened when you wanted to change all your text colors? You had to find all the references manually and change them! A global file search and replace wasn&#39;t good enough as maybe this black was for a border instead of text... it was a nightmare.</p>
+<p>Enter CSS. ]]></summary>
         <author>
             <name>Nathan Black</name>
             <uri>http://nathanblack.org/</uri>
@@ -23,6 +26,9 @@
         <link href="http://nathanblack.org/post/dont-mock-your-code-the-behavior-is-the-unit">
         </link>
         <updated>2017-01-30T00:00:00Z</updated>
+        <summary type="html"><![CDATA[<p>I first started really utilizing unit testing and test-driven development while on the <a href="http://web.archive.org/web/20120205035354/https://datamarket.azure.com/">DataMarket</a> team at Microsoft was slowing migrating an ASP.NET WebForms app to MVC. In a team that had no tests maintained by developers (<em>shudder</em> how did we develop software this long?) it was a big cultural change led by my great colleages <a href="https://github.com/jonsequitur">Jon Sequiera</a> and <a href="https://www.linkedin.com/in/dfrenkel">Dmitry Frenkel</a>, who I am very greatful to have the experience of working with.</p>
+<p>At the time we&#39;d write tests for our controllers. We&#39;d mock out all the dependencies it would need in a test and provide them. We were also using the <a href="">repository pattern</a> and testing the controller we&#39;d mock that out. The repository pattern was really needed as we couldn&#39;t actually make a call to the database due to a lot of different reasons that basically stem from a monolithic ball of sphagetti code and abomination that was <a href="http://www.ben-morris.com/entity-framework-anti-patterns-how-not-to-use-an-orm-with-sql-server/">Entity Framework 1.0</a>.</p>
+<p>That was nice to get developers used to writing tests for their code, but there was a lot of problems with that. Views were not tested at all, ]]></summary>
         <author>
             <name>Nathan Black</name>
             <uri>http://nathanblack.org/</uri>
@@ -34,6 +40,9 @@
         <link href="http://nathanblack.org/post/migration-to-static-site-via-gulp">
         </link>
         <updated>2017-01-29T00:00:00Z</updated>
+        <summary type="html"><![CDATA[<p>I <a href="/post/the-beginning">started this site</a> using <a href="http://jsantell.github.io/poet/">poet</a> on top of <a href="http://nodejs.org/">node.js</a> and <a href="http://expressjs.com/">express</a>, mainly wanting to expand my node skills and use my free Azure credits I got as a Microsoft employee. Azure Websites, the Heroku-like PaaS had just launched (now called <a href="https://azure.microsoft.com/en-us/services/app-service/">App Services</a>). It was a nice experience.</p>
+<p>Later on while working at <a href="https://www.crunchbase.com/organization/appuri#/entity">Appuri</a>, we decided to move our public website off of Hubspot as it was a nightmare for our talented designer, <a href="https://www.linkedin.com/in/jeffreynoldz">Jeff Reynolds</a>, who knew HTML and CSS, to work in. It would need marketing functionality, but we took the approach that whatever we needed could be provided via a 3rd party JavaScript tag on the client. So we didn&#39;t need a server at all. We could simply serve it from an <a href="http://docs.aws.amazon.com/AmazonS3/latest/dev/WebsiteHosting.html">S3 bucket</a> cheaply and it will always be up. <a href="https://circleci.com">Circle CI</a> would build the site and sync the bucket.</p>
+<p>So how to build it? ]]></summary>
         <author>
             <name>Nathan Black</name>
             <uri>http://nathanblack.org/</uri>
