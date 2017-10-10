@@ -186,7 +186,7 @@ h4,
 h5 {
   font-weight: 400;
   font-family: "Nobile";
-  line-height: 1.3em;
+  line-height: 1.5em;
 }
 h1,
 h2 {
@@ -200,6 +200,9 @@ span,
 a,
 li {
   line-height: 1.5em;
+}
+em {
+  font-weight: 600;
 }
 pre code {
   display: block;
@@ -316,7 +319,8 @@ body > header h4 {
 body > article h1,
 body > article h2,
 body > article h3 {
-  margin: 0.7em 0;
+  margin: 1em 0 1em 12px;
+  color: #cca5f0;
 }
 body > article .post-summary h1 {
   margin-top: 0.3em;
@@ -455,6 +459,14 @@ section.post-summary {
 span.date {
   color: #969896;
   font-size: 90%;
+}
+span.more::after {
+  content: '[...]';
+  color: #969896;
+}
+section.post ul:not(.tags) li::before {
+  content: '- ';
+  color: #969896;
 }
 .npm-diff label {
   display: inline-block;

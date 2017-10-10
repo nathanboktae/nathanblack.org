@@ -9,7 +9,7 @@
 <p>Many of the good software design principles don&#39;t apply to CSS because it&#39;s not code, but a layout engine. With a good DSL (see the next point) you can blend extra principles like composibility and refactoring in, but there is no high order functions, dependecy injection, visitor pattern, etc stuff to apply.</p>
 <h3 id="mature-css-processors-have-been-addressing-limitations-in-css-for-years">Mature CSS Processors have been addressing limitations in CSS for years</h3>
 <p>We&#39;ve had many successful years of using SASS, LESS, Stylus, and the new kid PostCSS. These great robust DSLs have many features and plugins to address whatever need the CSS-in-JS community thinks can&#39;t be solved. Let&#39;s <a href="https://speakerdeck.com/vjeux/react-css-in-js">go through them</a></p>
-<ol>
+<ul>
 <li><em>Global Namespace</em> I addressed why this is good for design and UX previously.</li>
 <li><em>Dependencies</em>. Webpack users have been able to <code>require()</code> CSS dependencies and <a href="https://webpack.github.io/docs/stylesheets.html">bundle them together</a> for a long time.</li>
 <li><em>Dead Code Elimination</em> Webpack 2+ <a href="https://webpack.js.org/guides/tree-shaking/">supports tree shaking</a> to elmitate dead CSS dependencies at the component level. Andy Osami shows how you can <a href="https://addyosmani.com/blog/removing-unused-css/">remove unused rules and add it to you build system</a>. The Chrome dev tools feature an <a href="http://meeech.amihod.com/very-useful-find-unused-css-rules-with-google/">Audit tab</a> that can reveal unused rules.</li>
@@ -17,7 +17,7 @@
 <li><em>Sharing Constants</em> I&#39;ve always created a <code>definitions.styl</code> that contained all my variables and mixins, and included it at every script. Very trivial.</li>
 <li><em>Non-deterministic Resolution</em> Pure FUD. CSS Specificity is very deterministic. A great analogy to learn this was to <a href="https://www.smashingmagazine.com/2007/07/css-specificity-things-you-should-know/">compare it to poker</a>.</li>
 <li><em>Isolation</em>. You can organize your stylesheets however you like and use <code>import</code> in CSS and <code>require()</code> from JavaScript via Webpack / browserify. Also putitng styling concerns in JavaScript creates higher coupling and <em>reduces</em> isolation.</li>
-</ol>
+</ul>
 <h3 id="fighting-against-web-standards-is-a-loosing-battle">Fighting against web standards is a loosing battle</h3>
 <p>JavaScript frameworks come and go. CSS has been a standard since the dawn of the century. Want to integrate with that <a href="https://dbushell.com/Pikaday/">great datepicker written in plain JavaScript</a>? Well it uses classes (that you can read!) so you need CSS. Psuedoelements, psuedoclasses, CSS variables, and animations all require stylesheets.</p>
 <h3 id="you-still-need-to-learn-css">You still need to learn CSS</h3>
