@@ -4,6 +4,7 @@
   "dependencies": {
     "axios": "^0.15.3",
     "feed": "^0.3.0",
+    "gh-pages": "^1.0.0",
     "gulp": "^3.9.1",
     "gulp-concat": "^2.6.0",
     "gulp-highlight": "^2.0.0",
@@ -22,7 +23,8 @@
     "vinyl": "^1.1.1"
   },
   "scripts": {
-    "test": "gulp"
+    "test": "gulp",
+    "publish": "gulp publish"
   },
   "devDependencies": {
     "browser-sync": "^2.12.3"

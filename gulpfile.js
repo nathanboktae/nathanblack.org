@@ -10,6 +10,7 @@ const
   markdown = require('gulp-markdown-to-json'),
   through = require('through2'),
   browserSync = require('browser-sync'),
+  ghPages = require('gh-pages'),
   moment = require('moment'),
   path = require('path'),
   commitHash = (process.env.CIRCLE_SHA1 || '').substr(0, 7),
@@ -20,7 +21,8 @@ const
     'assets/*.woff2',
     'assets/*.png',
     'assets/*.jpg',
-    'assets/*.svg'
+    'assets/*.svg',
+    'CNAME'
   ],
   serving = process.argv[2] === 'serve',
   jadeLocals = { moment, siteStyles, siteScript },
@@ -216,4 +218,13 @@ gulp.task('serve', ['default'], function() {
   gulp.watch(['styles/*.styl'], ['stylus'])
   gulp.watch(['blog/*.md', 'templates/*.jade'], ['blog-nodeps'])
   gulp.watch(['scripts/**/*.js'], ['scripts'])
+})
+
+gulp.task('publish', ['default'], function(done) {
+  ghPages.publish('build', {
+    user: {
+      name: 'Nathan Black',
+      email: 'nathan@nathanblack.org'
+    }
+  }, done)
 })
