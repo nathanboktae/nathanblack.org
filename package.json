@@ -24,7 +24,8 @@
   },
   "scripts": {
     "test": "gulp",
-    "publish": "gulp publish"
+    "publish": "gulp publish",
+    "serve": "gulp serve"
   },
   "devDependencies": {
     "browser-sync": "^2.12.3"

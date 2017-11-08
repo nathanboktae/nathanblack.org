@@ -72,7 +72,7 @@ a, a:visited
 h1, h2, h3, h4, h5
   font-weight 400
   font-family header-font
-  line-height 1.3em
+  line-height 1.5em
 
 h1, h2
   font-size title-size
@@ -82,6 +82,8 @@ h3
 
 p, span, a, li
   line-height 1.5em
+em
+  font-weight 600
 
 pre code
   display block
@@ -156,7 +158,7 @@ body > header
     span.name
       font-weight 700
   h4
-    margin-left: 2em
+    margin-left 2em
     font-size 12px
     @media mqPhone
       margin-left medium-spacer
@@ -165,7 +167,8 @@ body > article
   @media only screen and (min-width: 1076px)
     width 60%
   h1, h2, h3
-    margin: .7em 0
+    margin 1em 0 1em 12px
+    color secondary-color
   .post-summary h1
     margin-top 0.3em
   p, ul
@@ -224,6 +227,14 @@ section.post-summary
 span.date
   color subtle-text-color
   font-size 90%
+span.more::after
+  content '[...]'
+  color subtle-text-color
+
+section.post
+  ul:not(.tags) li::before
+    content '- '
+    color subtle-text-color
 
 .npm-diff
   label

@@ -77,6 +77,9 @@ function fileToArticle(notSoVinylFile) {
   })
 
   article.summary = article.body.substr(0, article.body.indexOf('<!--more-->')).replace(/<img[^>]+>/g, '')
+  if (article.body.length > article.summary.length + 5) {
+    article.summary += ' <span class="more"></span>'
+  }
 
   if (!article.date) {
     if (article.draft) {
