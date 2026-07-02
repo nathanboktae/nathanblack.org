@@ -8,24 +8,27 @@ const lossOverlay = document.querySelector("#loss-overlay");
 const SOCIALS = [
   {
     id: "linkedin",
+    name: "LinkedIn",
     label: "in",
     color: "#0a66c2",
     glow: "rgba(10, 102, 194, 0.55)",
-    url: "https://www.linkedin.com/in/nathanjblack",
+    url: "https://www.linkedin.com/in/nathanjblack/",
   },
   {
     id: "instagram",
+    name: "Instagram",
     label: "ig",
     color: "#ff3b8d",
     glow: "rgba(255, 59, 141, 0.55)",
-    url: "https://instagram.com/nathan.j.black",
+    url: "https://www.instagram.com/nathan.j.black/",
   },
   {
     id: "github",
+    name: "GitHub",
     label: "gh",
     color: "#f7fff7",
     glow: "rgba(247, 255, 247, 0.45)",
-    url: "https://github.com/nathanboktae",
+    url: "https://github.com/nathanboktae/",
   },
 ];
 
@@ -47,8 +50,7 @@ const game = {
   screenShake: 0,
   state: "playing",
   restartTimer: 0,
-  redirectTimer: 0,
-  redirectUrl: "",
+  redirectTimeoutId: null,
   player: {
     x: 0,
     y: 0,
@@ -73,6 +75,15 @@ function rand(min, max) {
 
 function distance(a, b) {
   return Math.hypot(a.x - b.x, a.y - b.y);
+}
+
+function clearScheduledRedirect() {
+  if (game.redirectTimeoutId === null) {
+    return;
+  }
+
+  window.clearTimeout(game.redirectTimeoutId);
+  game.redirectTimeoutId = null;
 }
 
 function makeProgressHud() {
@@ -113,10 +124,9 @@ function makeStars() {
 }
 
 function resetGame() {
+  clearScheduledRedirect();
   game.state = "playing";
   game.restartTimer = 0;
-  game.redirectTimer = 0;
-  game.redirectUrl = "";
   game.fireTimer = 0;
   game.screenShake = 0;
   game.bullets = [];
@@ -376,7 +386,7 @@ function resolveHits() {
           pulseHud(centipede);
 
           if (!centipede.alive.some(Boolean)) {
-            triggerRedirect(centipede.social.url);
+            triggerVictory(centipede.social);
           } else if (Math.random() > 0.45) {
             game.mushrooms.push({
               x: segment.x,
@@ -424,14 +434,17 @@ function triggerLoss() {
   makeSparks(game.player.x, game.player.y, "#ff3b8d", 36);
 }
 
-function triggerRedirect(url) {
+function triggerVictory(social) {
   if (game.state !== "playing") {
     return;
   }
 
   game.state = "won";
-  game.redirectTimer = 0.55;
-  game.redirectUrl = url;
+  clearScheduledRedirect();
+  game.redirectTimeoutId = window.setTimeout(() => {
+    game.redirectTimeoutId = null;
+    window.location.assign(social.url);
+  }, 550);
   game.screenShake = 0.22;
 }
 
@@ -471,11 +484,7 @@ function update(dt) {
   }
 
   if (game.state === "won") {
-    game.redirectTimer -= dt;
     updateSparks(dt);
-    if (game.redirectTimer <= 0) {
-      window.location.assign(game.redirectUrl);
-    }
     return;
   }
 
