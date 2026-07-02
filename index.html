@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="A personal homepage arcade game inspired by Atari Centipede."
+    />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <title>Centipede / Nathan Black</title>
+  </head>
+  <body>
+    <main id="game-shell" aria-label="Centipede social arcade">
+      <canvas id="game" aria-label="Centipede arcade game"></canvas>
+      <section id="hud" aria-live="polite">
+        <div class="hud-brand">
+          <span class="hud-title">CENTIPEDE</span>
+          <span class="hud-subtitle">NATHAN BLACK</span>
+        </div>
+        <div id="social-progress" class="social-progress"></div>
+      </section>
+      <div id="loss-overlay" class="loss-overlay" hidden>
+        <img
+          src="/come-on-major-william-cage.gif"
+          alt="Come on Major William Cage"
+        />
+      </div>
+    </main>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
