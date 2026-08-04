@@ -1,4 +1,5 @@
 # Tesla Fleet API private keys (the public .well-known PEM remains trackable)
 tesla_fleet.key
-tesla_fleet.private-key.pem
-tesla_fleet_private_key.pem
+*.private-key.pem
+*-private-key.pem
+*_private_key.pem
